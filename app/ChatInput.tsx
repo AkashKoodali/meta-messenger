@@ -5,8 +5,14 @@ import { v4 as uuid } from 'uuid';
 import { Message } from "../typings";
 import useSWR from 'swr'
 import fetcher from "../utils/fetchMessages";
+import { unstable_getServerSession } from "next-auth";
 
-function  ChatInput() {
+
+type Props = {
+  session: Awaited<ReturnType<typeof unstable_getServerSession>>
+}
+
+function  ChatInput({session}: Props) {
 
   const [input, setInput] = useState("");
   const { data : messages, error, mutate } = useSWR('/api/getMessages', fetcher);
@@ -18,7 +24,7 @@ function  ChatInput() {
 
     e.preventDefault();
 
-    if(!input) return;
+    if(!input || !session) return;
 
     const messageToSent = input;
 
@@ -30,9 +36,10 @@ function  ChatInput() {
         id,
         message: messageToSent,
         createdAt: Date.now(),
-        username: "elon musk",
-        profilePic:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSz5F8wSCflxtilF61vLvl1G4CbLuzLPuE-7QUJuN7e8t2Fp4gtKN6O&usqp=CAE&s",
-        email:"akash@gmail",
+        username: session?.user?.name!,
+        profilePic:session?.user?.image!,
+        //"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSz5F8wSCflxtilF61vLvl1G4CbLuzLPuE-7QUJuN7e8t2Fp4gtKN6O&usqp=CAE&s",
+        email: session?.user?.email!,
 
     }
 
@@ -64,6 +71,7 @@ function  ChatInput() {
         className="fixed bottom-0 z-50 w-full flex px-10 py-5 space-x-2 border-t border-gray-100 bg-white ">
       <input
         type="text"
+        disabled={!session}
         value={input}
         onChange={e => setInput(e.target.value)}
         placeholder="Enter a message..."

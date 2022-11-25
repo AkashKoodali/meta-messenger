@@ -1,19 +1,20 @@
-import '../styles/globals.css'
-import Heder from './Heder'
+import "../styles/globals.css";
+import Heder from "./Heder";
 
-export default function RootLayout({
+import { Providers } from "./providers";
+
+export default async function RootLayout({
   children,
 }: {
-  children: React.ReactNode
+  children: React.ReactNode;
 }) {
   return (
     <html>
       <head />
-      
       <body>
-      <Heder/>
+        <Heder />
         {children}
-        </body>
+      </body>
     </html>
-  )
+  );
 }

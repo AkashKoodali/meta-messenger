@@ -1,22 +1,32 @@
-import React from 'react'
-import { Message } from '../typings';
-import ChatInput from './ChatInput';
-import MessageList from './MessageList';
+import React from "react";
+import { Message } from "../typings";
+import ChatInput from "./ChatInput";
+import MessageList from "./MessageList";
+
+//next auth
+import { unstable_getServerSession } from "next-auth/next";
+import { Providers } from "./providers";
 
 async function HomePage() {
-const data = await fetch(`${process.env.VERCEL_URL}/api/getMessages`).then((res)=> res.json());
+  const data = await fetch(`${process.env.VERCEL_URL}/api/getMessages`).then(
+    (res) => res.json()
+  );
 
-const messages: Message[] = data.messages;
+  const messages: Message[] = data.messages;
+
+  const session = await unstable_getServerSession();
 
   return (
-    <main>
+    <Providers session={session}>
+      <main>
         {/* message List */}
-        <MessageList initialMessages={messages}/>
+        <MessageList initialMessages={messages} />
 
         {/* chat input */}
-        <ChatInput/>
-    </main>
-  )
+        <ChatInput session={session} />
+      </main>
+    </Providers>
+  );
 }
 
 export default HomePage;

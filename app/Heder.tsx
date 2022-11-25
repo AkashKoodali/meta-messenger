@@ -2,9 +2,10 @@ import React from "react";
 import Image from "next/image";
 import Link from "next/link";
 import LogOutButton from "./LogOutButton";
+import { unstable_getServerSession } from 'next-auth/next';
 
-export default function Heder() {
-  const session = true;
+async function Heder() {
+  const session =  await unstable_getServerSession();
 
   if (session)
     return (
@@ -15,12 +16,12 @@ export default function Heder() {
             height={10}
             width={50}
             alt=""
-            src="https://links.papareact.com/jne"
+            src={session.user?.image!}
           />
         </div>
         <div>
         <p className="text-blue-400">Logged in as:</p>
-        <p className="font-bold text-lg">Akash</p>
+        <p className="font-bold text-lg">{session.user?.name}</p>
         </div>
        <LogOutButton/>
       </header>
@@ -51,3 +52,5 @@ export default function Heder() {
     </header>
   );
 }
+
+export default Heder;
