@@ -11,7 +11,7 @@ async function Heder() {
     return (
       <header className="sticky top-0 z-50 bg-white flex justify-between items-center p-10 shadow-sm">
         <div className="flex space-x-2">
-          <Image
+          <img
             className="rounded-full mx-2 object-contain"
             height={10}
             width={50}
