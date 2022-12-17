@@ -2,13 +2,15 @@ import React from "react";
 import Image from "next/image";
 import Link from "next/link";
 import LogOutButton from "./LogOutButton";
-import { unstable_getServerSession } from 'next-auth/next';
+import { Session } from "next-auth";
 
-async function Heder() {
-  const session =  await unstable_getServerSession();
-
-  if (session)
-    return (
+type Props = {
+  session : Session | null;
+}
+function Heder({session} : Props) {
+  
+  if (session) return (
+    
       <header className="sticky top-0 z-50 bg-white flex justify-between items-center p-10 shadow-sm">
         <div className="flex space-x-2">
           <img
@@ -25,10 +27,12 @@ async function Heder() {
         </div>
        <LogOutButton/>
       </header>
-    );
+   
+    )
 
 
   return (
+
     <header className="sticky top-0 z-50 bg-white flex justify-center p-10 shadow-sm">
       <div className="flex flex-col items-center space-y-5">
         <div className="flex space-x-2 items-center">
@@ -50,7 +54,9 @@ async function Heder() {
       </div>
       
     </header>
+ 
   );
 }
+
 
 export default Heder;
